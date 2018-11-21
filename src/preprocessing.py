@@ -11,11 +11,7 @@ def get_training_text(filename):
     """
     with open(os.path.abspath(os.path.join(os.getcwd(), "../input/", filename))) as file:
         text = file.read().replace("\n", '')  # Put the entire text into one big string
-        words = re.findall("[a-zA-Z]+", text)  # Only take the words
-
-        filtered_words = []
-        for word in words:
-            filtered_words.append(remove_accents(word))
+        filtered_words = re.findall("[a-zA-Z]+", text.lower())  # Only take the words
 
     return filtered_words
 
