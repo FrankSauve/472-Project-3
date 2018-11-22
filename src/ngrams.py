@@ -11,16 +11,19 @@ def get_unigram(words):
     alpha = 0.5
     char_total = 0
     unigram = {}
+
+    # Create dictionary key for each alphabet character and add alpha for smoothing
+    a = 97
+    while a < 123:
+        unigram[str(chr(a))] = alpha
+        char_total += alpha
+        a += 1
+
     for word in words:
         for char in word:
-            # If character is not in unigram yet, create new dictionary key
-            if char not in unigram:
-                unigram[char] = 1 + alpha
-                char_total += 1 + alpha
-            # Else if it already exists, increment letter frequency by one
-            else:
-                unigram[char] += 1
-                char_total += 1
+            # For each character encountered, increment letter frequency by one
+            unigram[char] += 1
+            char_total += 1
 
     # Calculate probability of each letter
     for c in unigram:
@@ -49,20 +52,26 @@ def get_bigram_v2(words):
     alpha = 0.5
     bigram_total = 0
     bigram = {}
+
+    # Find all char combinations and add alpha for smoothing
+    a = 97
+    while a < 123:
+        b = 97
+        while b < 123:
+            w = str(chr(a) + chr(b))
+            bigram[w] = alpha
+            bigram_total += alpha
+            b += 1
+        a += 1
+
     for word in words:
         i = 0
         while i < len(word) - 1:
-            # If character is not in bigram yet, create new dictionary key
-            if str(word[i]+word[i+1]) not in bigram:
-                bigram[str(word[i]+word[i+1])] = 1 + alpha
-                bigram_total += 1 + alpha
-            # Else if it already exists, increment letter frequency by one
-            else:
-                bigram[str(word[i]+word[i+1])] += 1
-                bigram_total += 1
+            w = str(word[i]+word[i+1])
+            # For each dual combo, increment letter frequency by one
+            bigram[w] += 1
+            bigram_total += 1
             i += 1
-
-    # TODO: Find un-used char combinations and add 0.5 (add +0.5 to bigram_total as well)
 
     # Calculate probability of each letter
     for c in bigram:

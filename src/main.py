@@ -3,6 +3,7 @@ import ngrams
 import output
 
 while True:
+
     option = input("1. Create unigrams\n"
                    "2. Query unigrams\n"
                    "3. Create bigrams\n"
