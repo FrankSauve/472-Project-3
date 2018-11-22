@@ -142,12 +142,9 @@ def query_bigram(query, english_bigram, french_bigram, german_bigram, output_fil
         # If c is not an empty space
         if " " not in c:
             # Add the log base 10 probability
-            if english_bigram[c] is not None:  #TODO: Figure out how to deal with non-existent uni/bigrams found in a query
-                log_probs['EN'] += math.log(english_bigram[c], 10)
-            if french_bigram[c] is not None:
-                log_probs['FR'] += math.log(french_bigram[c], 10)
-            if german_bigram[c] is not None:
-                log_probs['GE'] += math.log(german_bigram[c], 10)
+            log_probs['EN'] += math.log(english_bigram[c], 10)
+            log_probs['FR'] += math.log(french_bigram[c], 10)
+            log_probs['GE'] += math.log(german_bigram[c], 10)
 
             file.write("BIGRAM: " + c + "\n"
                         "FRENCH: P(" + c + ") = " + str(log_probs['FR']) + "\n" +
