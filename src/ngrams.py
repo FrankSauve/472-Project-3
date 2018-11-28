@@ -1,5 +1,6 @@
 import math
 import os
+import re
 
 
 def get_unigram(words):
@@ -31,6 +32,7 @@ def get_unigram(words):
 
     return unigram
 
+
 def get_bigram_v1(words):
     """
     Create a bigram model for the words provided
@@ -42,6 +44,7 @@ def get_bigram_v1(words):
     # TODO: Implement bigram version without taking into account word endings
 
     return bigram
+
 
 def get_bigram_v2(words):
     """
@@ -95,6 +98,13 @@ def query_unigram(query, english_unigram, french_unigram, german_unigram, output
         'FR': 0,
         'GE': 0
     }
+
+    query_words = re.findall("[a-zA-Z]+", query)
+    query = ""
+    for word in query_words:
+        query += word + " "
+
+    # Open in write mode (Overwrites the file)
     file = open(os.path.abspath(os.path.join(os.getcwd(), "../query_output/", output_file)), "w+")
     file.write(query + "\n\n" + "UNIGRAM MODEL:\n\n")
     # Loop through all characters of the query
@@ -132,7 +142,15 @@ def query_bigram(query, english_bigram, french_bigram, german_bigram, output_fil
         'FR': 0,
         'GE': 0
     }
-    file = open(os.path.abspath(os.path.join(os.getcwd(), "../query_output/", output_file)), "w+")
+
+    # Clean query
+    query_words = re.findall("[a-zA-Z]+", query)
+    query = ""
+    for word in query_words:
+        query += word + " "
+
+    # Open in append mode (Does not overwrite the file)
+    file = open(os.path.abspath(os.path.join(os.getcwd(), "../query_output/", output_file)), "a")
     file.write(query + "\n\n" + "BIGRAM MODEL:\n\n")
     # Loop through all characters of the query
 
@@ -156,5 +174,4 @@ def query_bigram(query, english_bigram, french_bigram, german_bigram, output_fil
     sorted_by_value = sorted(log_probs.items(), key=lambda kv: kv[1], reverse=True)
 
     return sorted_by_value[0]
-
 
