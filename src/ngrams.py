@@ -110,20 +110,22 @@ def get_trigram(words):
     return trigram
 
 
-def query_unigram(query, english_unigram, french_unigram, german_unigram, output_file):
+def query_unigram(query, english_unigram, french_unigram, german_unigram, welsh_unigram, output_file):
     """
     Query on unigrams to find the most probable language
     :param query: The text query
     :param english_unigram:
     :param french_unigram:
     :param german_unigram:
+    :param welsh_unigram:
     :return:
     """
     # Dictionary of log probabilities of each language
     log_probs = {
         'EN': 0,
         'FR': 0,
-        'GE': 0
+        'GE': 0,
+        'CY': 0
     }
 
     query_words = re.findall("[a-zA-Z]+", query)
@@ -142,11 +144,13 @@ def query_unigram(query, english_unigram, french_unigram, german_unigram, output
             log_probs['EN'] += math.log(english_unigram[c], 10)
             log_probs['FR'] += math.log(french_unigram[c], 10)
             log_probs['GE'] += math.log(german_unigram[c], 10)
+            log_probs['CY'] += math.log(welsh_unigram[c], 10)
 
             file.write("UNIGRAM: " + c + "\n"
                         "FRENCH: P(" + c + ") = " + str(log_probs['FR']) + "\n" +
                         "ENGLISH: P(" + c + ") = " + str(log_probs['EN']) + "\n" +
-                        "GERMAN: P(" + c + ") = " + str(log_probs['GE']) + "\n\n")
+                        "GERMAN: P(" + c + ") = " + str(log_probs['GE']) + "\n" +
+                        "WELSH: P(" + c + ") = " + str(log_probs['CY']) + "\n\n")
 
     # Sort the languages by log probability
     sorted_by_value = sorted(log_probs.items(), key=lambda kv: kv[1], reverse=True)
@@ -154,20 +158,22 @@ def query_unigram(query, english_unigram, french_unigram, german_unigram, output
     return sorted_by_value[0]
 
 
-def query_bigram(query, english_bigram, french_bigram, german_bigram, output_file):
+def query_bigram(query, english_bigram, french_bigram, german_bigram, welsh_bigram, output_file):
     """
     Query on bigrams to find the most probable language
     :param query: The text query
     :param english_bigram:
     :param french_bigram:
     :param german_bigram:
+    :param welsh_bigram:
     :return:
     """
     # Dictionary of log probabilities of each language
     log_probs = {
         'EN': 0,
         'FR': 0,
-        'GE': 0
+        'GE': 0,
+        'CY': 0
     }
 
     # Clean query
@@ -191,11 +197,13 @@ def query_bigram(query, english_bigram, french_bigram, german_bigram, output_fil
             log_probs['EN'] += math.log(english_bigram[c], 10)
             log_probs['FR'] += math.log(french_bigram[c], 10)
             log_probs['GE'] += math.log(german_bigram[c], 10)
+            log_probs['CY'] += math.log(welsh_bigram[c], 10)
 
             file.write("BIGRAM: " + c + "\n"
                         "FRENCH: P(" + c + ") = " + str(log_probs['FR']) + "\n" +
                         "ENGLISH: P(" + c + ") = " + str(log_probs['EN']) + "\n" +
-                        "GERMAN: P(" + c + ") = " + str(log_probs['GE']) + "\n\n")
+                        "GERMAN: P(" + c + ") = " + str(log_probs['GE']) + "\n" +
+                        "WELSH: P(" + c + ") = " + str(log_probs['CY']) + "\n\n")
         i += 1
 
     # Sort the languages by log probability
@@ -204,20 +212,22 @@ def query_bigram(query, english_bigram, french_bigram, german_bigram, output_fil
     return sorted_by_value[0]
 
 
-def query_trigram(query, english_trigram, french_trigram, german_trigram, output_file):
+def query_trigram(query, english_trigram, french_trigram, german_trigram, welsh_trigram, output_file):
     """
     Query on bigrams to find the most probable language
     :param query: The text query
     :param english_trigram:
     :param french_trigram:
     :param german_trigram:
+    :param welsh_trigram:
     :return:
     """
     # Dictionary of log probabilities of each language
     log_probs = {
         'EN': 0,
         'FR': 0,
-        'GE': 0
+        'GE': 0,
+        'CY': 0
     }
 
     # Clean query
@@ -241,11 +251,13 @@ def query_trigram(query, english_trigram, french_trigram, german_trigram, output
             log_probs['EN'] += math.log(english_trigram[c], 10)
             log_probs['FR'] += math.log(french_trigram[c], 10)
             log_probs['GE'] += math.log(german_trigram[c], 10)
+            log_probs['CY'] += math.log(welsh_trigram[c], 10)
 
             file.write("TRIGRAM: " + c + "\n"
                         "FRENCH: P(" + c + ") = " + str(log_probs['FR']) + "\n" +
                         "ENGLISH: P(" + c + ") = " + str(log_probs['EN']) + "\n" +
-                        "GERMAN: P(" + c + ") = " + str(log_probs['GE']) + "\n\n")
+                        "GERMAN: P(" + c + ") = " + str(log_probs['GE']) + "\n" +
+                        "WELSH: P(" + c + ") = " + str(log_probs['CY']) + "\n\n")
         i += 1
 
     # Sort the languages by log probability

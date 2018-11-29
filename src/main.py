@@ -36,6 +36,11 @@ while True:
         german_unigram = ngrams.get_unigram(german_text)
         output.write_model(sorted(german_unigram.items()), "unigramOT.txt")
 
+        # Welsh unigrams
+        welsh_text = preprocessing.get_training_text("trainCY.txt")
+        welsh_unigram = ngrams.get_unigram(welsh_text)
+        output.write_model(sorted(welsh_unigram.items()), "unigramCY.txt")
+
         print("Unigrams created!\n")
 
     # Query unigrams
@@ -46,10 +51,12 @@ while True:
         french_unigram = ngrams.get_unigram(french_text)
         german_text = preprocessing.get_training_text("trainOT.txt")
         german_unigram = ngrams.get_unigram(german_text)
+        welsh_text = preprocessing.get_training_text("trainCY.txt")
+        welsh_unigram = ngrams.get_unigram(welsh_text)
 
         query = input("Enter your query:\n")
         query_number = input("Enter the number of the query:\n")
-        print(ngrams.query_unigram(query.lower(), english_unigram, french_unigram, german_unigram,
+        print(ngrams.query_unigram(query.lower(), english_unigram, french_unigram, german_unigram, welsh_unigram,
                                        "out" + str(query_number) + ".txt"))
 
     # Create bigrams
@@ -69,6 +76,11 @@ while True:
         german_bigram = ngrams.get_bigram(german_text)
         output.write_model(sorted(german_bigram.items()), "bigramOT.txt")
 
+        # Welsh bigrams
+        welsh_text = preprocessing.get_training_text("trainCY.txt")
+        welsh_bigram = ngrams.get_bigram(welsh_text)
+        output.write_model(sorted(welsh_bigram.items()), "bigramCY.txt")
+
         print("Bigrams created!\n")
 
     # Query bigrams
@@ -79,10 +91,12 @@ while True:
         french_bigram = ngrams.get_bigram(french_text)
         german_text = preprocessing.get_training_text("trainOT.txt")
         german_bigram = ngrams.get_bigram(german_text)
+        welsh_text = preprocessing.get_training_text("trainCY.txt")
+        welsh_bigram = ngrams.get_bigram(welsh_text)
 
         query = input("Enter your query:\n")
         query_number = input("Enter the number of the query:\n")
-        print(ngrams.query_bigram(query.lower(), english_bigram, french_bigram, german_bigram,
+        print(ngrams.query_bigram(query.lower(), english_bigram, french_bigram, german_bigram, welsh_bigram,
                                    "out" + str(query_number) + ".txt"))
 
     # Create trigrams
@@ -102,6 +116,11 @@ while True:
         german_trigram = ngrams.get_trigram(german_text)
         output.write_model(sorted(german_trigram.items()), "trigramOT.txt")
 
+        # Welsh trigrams
+        welsh_text = preprocessing.get_training_text("trainCY.txt")
+        welsh_trigram = ngrams.get_trigram(welsh_text)
+        output.write_model(sorted(welsh_trigram.items()), "trigramCY.txt")
+
         print("Trigrams created!\n")
 
     # Query trigrams
@@ -112,10 +131,12 @@ while True:
         french_trigram = ngrams.get_trigram(french_text)
         german_text = preprocessing.get_training_text("trainOT.txt")
         german_trigram = ngrams.get_trigram(german_text)
+        welsh_text = preprocessing.get_training_text("trainCY.txt")
+        welsh_trigram = ngrams.get_trigram(welsh_text)
 
         query = input("Enter your query:\n")
         query_number = input("Enter the number of the query:\n")
-        print(ngrams.query_trigram(query.lower(), english_trigram, french_trigram, german_trigram,
+        print(ngrams.query_trigram(query.lower(), english_trigram, french_trigram, german_trigram, welsh_trigram,
                                   "out" + str(query_number) + ".txt"))
 
 
@@ -133,19 +154,23 @@ while True:
         german_unigram = ngrams.get_unigram(german_text)
         german_bigram = ngrams.get_bigram(german_text)
         german_trigram = ngrams.get_trigram(german_text)
+        welsh_text = preprocessing.get_training_text("trainCY.txt")
+        welsh_unigram = ngrams.get_unigram(welsh_text)
+        welsh_bigram = ngrams.get_bigram(welsh_text)
+        welsh_trigram = ngrams.get_trigram(welsh_text)
 
         # Run all queries on unigram
         for i, query in enumerate(get_queries("queries.txt")):
-            print(ngrams.query_unigram(query.lower(), english_unigram, french_unigram, german_unigram,
+            print(ngrams.query_unigram(query.lower(), english_unigram, french_unigram, german_unigram, welsh_unigram,
                                        "out" + str(i + 1) + ".txt"))
 
         # Run all queries on bigram
         for i, query in enumerate(get_queries("queries.txt")):
-            print(ngrams.query_bigram(query.lower(), english_bigram, french_bigram, german_bigram,
+            print(ngrams.query_bigram(query.lower(), english_bigram, french_bigram, german_bigram, welsh_bigram,
                                       "out" + str(i + 1) + ".txt"))
 
-        # Run all queries on bigram
+        # Run all queries on trigram
         for i, query in enumerate(get_queries("queries.txt")):
-            print(ngrams.query_trigram(query.lower(), english_trigram, french_trigram, german_trigram,
+            print(ngrams.query_trigram(query.lower(), english_trigram, french_trigram, german_trigram, welsh_trigram,
                                       "out" + str(i + 1) + ".txt"))
 
