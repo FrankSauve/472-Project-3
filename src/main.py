@@ -11,7 +11,7 @@ def get_queries(filename):
 
 while True:
 
-    option = input("1. Create unigrams\n"
+    option = input("\n\n1. Create unigrams\n"
                    "2. Query unigrams\n"
                    "3. Create bigrams\n"
                    "4. Query bigrams\n"
@@ -159,18 +159,15 @@ while True:
         welsh_bigram = ngrams.get_bigram(welsh_text)
         welsh_trigram = ngrams.get_trigram(welsh_text)
 
-        # Run all queries on unigram
+        # Run all queries on ngrams
         for i, query in enumerate(get_queries("queries.txt")):
+
+            print("\nQUERY " + str(i+1) + ": " + query)
+
             print(ngrams.query_unigram(query.lower(), english_unigram, french_unigram, german_unigram, welsh_unigram,
                                        "out" + str(i + 1) + ".txt"))
-
-        # Run all queries on bigram
-        for i, query in enumerate(get_queries("queries.txt")):
             print(ngrams.query_bigram(query.lower(), english_bigram, french_bigram, german_bigram, welsh_bigram,
                                       "out" + str(i + 1) + ".txt"))
-
-        # Run all queries on trigram
-        for i, query in enumerate(get_queries("queries.txt")):
             print(ngrams.query_trigram(query.lower(), english_trigram, french_trigram, german_trigram, welsh_trigram,
-                                      "out" + str(i + 1) + ".txt"))
+                                       "out" + str(i + 1) + ".txt"))
 
