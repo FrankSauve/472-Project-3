@@ -33,20 +33,7 @@ def get_unigram(words):
     return unigram
 
 
-def get_bigram_v1(words):
-    """
-    Create a bigram model for the words provided
-    :param words: List of words
-    :return: sorted bigram not taking into account word endings
-    """
-    bigram = {}
-
-    # TODO: Implement bigram version without taking into account word endings
-
-    return bigram
-
-
-def get_bigram_v2(words):
+def get_bigram(words):
     """
     Create a bigram model for the words provided
     :param words: List of words
@@ -83,6 +70,46 @@ def get_bigram_v2(words):
     return bigram
 
 
+def get_trigram(words):
+    """
+    Create a trigram model for the words provided
+    :param words: List of words
+    :return: sorted trigram taking into account word endings
+    """
+    alpha = 0.5
+    trigram_total = 0
+    trigram = {}
+
+    # Find all char combinations and add alpha for smoothing
+    a = 97
+    while a < 123:
+        b = 97
+        while b < 123:
+            c = 97
+            while c < 123:
+                w = str(chr(a) + chr(b) + chr(c))
+                trigram[w] = alpha
+                trigram_total += alpha
+                c += 1
+            b += 1
+        a += 1
+
+    for word in words:
+        i = 0
+        while i < len(word) - 2:
+            w = str(word[i] + word[i+1] + word[i+2])
+            # For each combo, increment letter frequency by one
+            trigram[w] += 1
+            trigram_total += 1
+            i += 1
+
+    # Calculate probability of each letter
+    for c in trigram:
+        trigram[c] = trigram[c]/trigram_total
+
+    return trigram
+
+
 def query_unigram(query, english_unigram, french_unigram, german_unigram, output_file):
     """
     Query on unigrams to find the most probable language
@@ -110,7 +137,7 @@ def query_unigram(query, english_unigram, french_unigram, german_unigram, output
     # Loop through all characters of the query
     for c in query:
         # If c is not an empty space
-        if c != " ":
+        if " " not in c:
             # Add the log base 10 probability
             log_probs['EN'] += math.log(english_unigram[c], 10)
             log_probs['FR'] += math.log(french_unigram[c], 10)
@@ -157,6 +184,7 @@ def query_bigram(query, english_bigram, french_bigram, german_bigram, output_fil
     i = 0
     while i < len(query)-1:
         c = str(query[i]+query[i+1])
+
         # If c is not an empty space
         if " " not in c:
             # Add the log base 10 probability
@@ -165,6 +193,56 @@ def query_bigram(query, english_bigram, french_bigram, german_bigram, output_fil
             log_probs['GE'] += math.log(german_bigram[c], 10)
 
             file.write("BIGRAM: " + c + "\n"
+                        "FRENCH: P(" + c + ") = " + str(log_probs['FR']) + "\n" +
+                        "ENGLISH: P(" + c + ") = " + str(log_probs['EN']) + "\n" +
+                        "GERMAN: P(" + c + ") = " + str(log_probs['GE']) + "\n\n")
+        i += 1
+
+    # Sort the languages by log probability
+    sorted_by_value = sorted(log_probs.items(), key=lambda kv: kv[1], reverse=True)
+
+    return sorted_by_value[0]
+
+
+def query_trigram(query, english_trigram, french_trigram, german_trigram, output_file):
+    """
+    Query on bigrams to find the most probable language
+    :param query: The text query
+    :param english_trigram:
+    :param french_trigram:
+    :param german_trigram:
+    :return:
+    """
+    # Dictionary of log probabilities of each language
+    log_probs = {
+        'EN': 0,
+        'FR': 0,
+        'GE': 0
+    }
+
+    # Clean query
+    query_words = re.findall("[a-zA-Z]+", query)
+    query = ""
+    for word in query_words:
+        query += word + " "
+
+    # Open in append mode (Does not overwrite the file)
+    file = open(os.path.abspath(os.path.join(os.getcwd(), "../query_output/", output_file)), "a")
+    file.write(query + "\n\n" + "TRIGRAM MODEL:\n\n")
+    # Loop through all characters of the query
+
+    i = 0
+    while i < len(query) - 2:
+        c = str(query[i] + query[i+1] + query[i+2])
+
+        # If c is not an empty space
+        if " " not in c:
+            # Add the log base 10 probability
+            log_probs['EN'] += math.log(english_trigram[c], 10)
+            log_probs['FR'] += math.log(french_trigram[c], 10)
+            log_probs['GE'] += math.log(german_trigram[c], 10)
+
+            file.write("TRIGRAM: " + c + "\n"
                         "FRENCH: P(" + c + ") = " + str(log_probs['FR']) + "\n" +
                         "ENGLISH: P(" + c + ") = " + str(log_probs['EN']) + "\n" +
                         "GERMAN: P(" + c + ") = " + str(log_probs['GE']) + "\n\n")
